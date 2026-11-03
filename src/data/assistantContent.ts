@@ -1,3 +1,5 @@
+import { dressCodeGuidance } from '../../shared/wedding'
+
 export type AssistantIntent = 'dating' | 'meeting' | 'firstMove' | 'wedding' | 'dressCode' | 'rsvp' | 'unknown'
 
 export interface AssistantAnswer {
@@ -24,7 +26,7 @@ export const assistantAnswers: Record<AssistantIntent, AssistantAnswer> = {
     action: { label: 'View Celebration', target: '#celebration' },
   },
   dressCode: {
-    text: 'The dress code is formal: suit and tie for gentlemen, and a long gown or formal dress for ladies. The motif is Burgundy, Black, Champagne, and Soft Blush.',
+    text: `${dressCodeGuidance.title}. Gentlemen: ${dressCodeGuidance.gentlemen} Ladies: ${dressCodeGuidance.ladies}`,
     action: { label: 'View Dress Code', target: '#details' },
   },
   rsvp: {

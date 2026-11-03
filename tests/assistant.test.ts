@@ -26,4 +26,10 @@ describe('wedding assistant content', () => {
     expect(assistantAnswers.dressCode.action?.target).toBe('#details')
     expect(assistantAnswers.rsvp.action?.target).toBe('#rsvp')
   })
+
+  it('uses the shared formal and semi-formal attire guidance', () => {
+    expect(assistantAnswers.dressCode.text).toContain('Formal / Semi-Formal')
+    expect(assistantAnswers.dressCode.text).toContain('black is reserved for gentlemen')
+    expect(assistantAnswers.dressCode.text).toContain('deep burgundy, champagne, or soft blush')
+  })
 })

@@ -1,5 +1,7 @@
 :root {
-  --wine: #650d14;
+  --deep-burgundy: #59000A;
+  --wine: var(--deep-burgundy);
+  --wine-rgb: 89 0 10;
   --wine-dark: #43090e;
   --wine-deep: #2b060a;
   --ivory: #f0ebe3;
@@ -47,7 +49,7 @@ a { color: inherit }
 .botanical { display: block; width: clamp(140px, 18vw, 190px); max-width: 100%; margin-inline: auto; fill: none; stroke: var(--wine); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round }
 
 /* Navigation */
-.site-header { background: rgba(240,235,227,.96); border-bottom: 1px solid rgba(101,13,20,.22); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px) }
+.site-header { background: rgba(240,235,227,.96); border-bottom: 1px solid rgb(var(--wine-rgb) / .22); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px) }
 .site-header__inner { align-items: center; display: flex; gap: clamp(16px, 3vw, 40px); justify-content: space-between; margin-inline: auto; max-width: var(--content); min-height: var(--header); padding-left: max(var(--gutter), env(safe-area-inset-left)); padding-right: max(var(--gutter), env(safe-area-inset-right)); width: 100% }
 .brand { align-items: center; display: flex; min-height: 44px; min-width: 44px; text-decoration: none }
 .nav { align-items: center; display: flex; gap: clamp(14px, 2.2vw, 30px) }
@@ -65,12 +67,34 @@ a { color: inherit }
 .cover-grid { align-items: center; column-gap: clamp(32px, 6vw, 92px); display: grid; grid-template-areas: "heading art" "detail art"; grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr); row-gap: clamp(20px, 3vw, 36px) }
 .cover-heading { grid-area: heading; min-width: 0 }
 .cover-art { align-items: center; display: flex; grid-area: art; justify-content: center; min-width: 0 }
-.hero-gallery { display: grid; gap: clamp(10px, 1.4vw, 18px); grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100% }
-.hero-gallery figure { aspect-ratio: 4 / 5; border: 1px solid rgba(240,235,227,.42); border-radius: 16px; box-shadow: 0 18px 40px rgba(33,25,22,.24); margin: 0; overflow: hidden; transition: box-shadow .3s ease, transform .3s ease }
+.hero-portrait-shell { min-width: 0; perspective: 1000px; text-align: center; width: 100% }
+.hero-portrait { --highlight-x: 50%; --highlight-y: 32%; --tilt-x: 0deg; --tilt-y: 0deg; background: rgba(43,6,10,.24); border-radius: 22px; isolation: isolate; padding: 12px; position: relative; transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)); transform-style: preserve-3d; transition: transform .42s cubic-bezier(.22,.75,.24,1) }
+.hero-portrait::before, .hero-portrait::after { border: 1px solid rgba(214,196,172,.42); border-radius: 22px; content: ''; inset: 3px; pointer-events: none; position: absolute; z-index: 2 }
+.hero-portrait::before { box-shadow: 0 28px 58px rgba(24,2,5,.34); inset: -7px 7px 7px -7px; z-index: 0 }
+.hero-portrait::after { border-color: rgba(240,235,227,.32); inset: 7px }
+.hero-gallery { display: grid; gap: clamp(10px, 1.4vw, 18px); grid-template-columns: repeat(2, minmax(0, 1fr)); position: relative; transform: translateZ(20px); width: 100%; z-index: 1 }
+.hero-gallery figure { aspect-ratio: 768 / 771; border: 1px solid rgba(240,235,227,.42); border-radius: 16px; box-shadow: 0 18px 40px rgba(33,25,22,.24); margin: 0; overflow: hidden; transition: box-shadow .3s ease, transform .3s ease }
 .hero-gallery figure:nth-child(2) { margin-top: clamp(16px, 2.4vw, 32px) }
 .hero-gallery img { display: block; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.22,.75,.24,1); width: 100% }
-.hero-gallery figure:hover { box-shadow: 0 24px 52px rgba(33,25,22,.32); transform: translateY(-4px) }
-.hero-gallery figure:hover img { transform: scale(1.04) }
+.hero-portrait__highlight { background: radial-gradient(circle at var(--highlight-x) var(--highlight-y), rgba(255,248,232,.2), transparent 36%); border-radius: 18px; inset: 12px; opacity: .5; pointer-events: none; position: absolute; transform: translateZ(38px); transition: opacity .3s ease; z-index: 3 }
+.hero-portrait.is-kissing .hero-gallery figure:first-child img { transform: scale(1.035) }
+.hero-portrait.is-kissing .hero-portrait__highlight { opacity: .78 }
+.kiss-particles { border-radius: 18px; inset: 12px; overflow: hidden; pointer-events: none; position: absolute; transform: translateZ(48px); z-index: 4 }
+.kiss-heart { color: #f7d7d9; font-size: clamp(.85rem, 1.7vw, 1.25rem); left: 23%; line-height: 1; opacity: 0; position: absolute; text-shadow: 0 2px 9px rgba(43,6,10,.65); top: 39% }
+.hero-portrait.is-kissing .kiss-heart--lead { animation: kiss-travel 1.25s cubic-bezier(.22,.75,.24,1) both }
+.hero-portrait.is-kissing .kiss-heart--one { animation: kiss-float-one 1.15s .08s ease-out both; left: 29%; top: 35% }
+.hero-portrait.is-kissing .kiss-heart--two { animation: kiss-float-two 1.2s .18s ease-out both; left: 34%; top: 43% }
+.hero-portrait.is-kissing .kiss-heart--three { animation: kiss-float-three 1.05s .25s ease-out both; left: 19%; top: 32% }
+.hero-kiss-button { background: transparent; border: 0; border-bottom: 1px solid rgba(214,196,172,.72); color: var(--champagne); cursor: pointer; font-size: .68rem; font-weight: 600; letter-spacing: .14em; margin-top: 20px; min-height: 44px; padding: 10px 4px 7px; text-transform: uppercase; transition: color .2s ease, border-color .2s ease }
+.hero-kiss-button:hover { border-color: var(--ivory); color: var(--ivory) }
+@media (hover: hover) and (pointer: fine) {
+  .hero-portrait:hover { will-change: transform }
+  .hero-portrait:hover .hero-gallery figure { box-shadow: 0 24px 52px rgba(33,25,22,.32) }
+}
+@keyframes kiss-travel { 0% { opacity: 0; transform: translate3d(0,8px,0) scale(.55) } 22%, 72% { opacity: 1 } 100% { opacity: 0; transform: translate3d(54px,-11px,0) scale(1.08) } }
+@keyframes kiss-float-one { 0% { opacity: 0; transform: translate3d(0,8px,0) scale(.5) rotate(-12deg) } 24%, 68% { opacity: .86 } 100% { opacity: 0; transform: translate3d(-13px,-44px,0) scale(.95) rotate(8deg) } }
+@keyframes kiss-float-two { 0% { opacity: 0; transform: translate3d(0,5px,0) scale(.45) rotate(10deg) } 25%, 70% { opacity: .72 } 100% { opacity: 0; transform: translate3d(17px,-39px,0) scale(.88) rotate(-8deg) } }
+@keyframes kiss-float-three { 0% { opacity: 0; transform: translate3d(0,6px,0) scale(.5) } 25%, 68% { opacity: .7 } 100% { opacity: 0; transform: translate3d(-17px,-31px,0) scale(.82) } }
 .cover-detail { grid-area: detail; min-width: 0 }
 .cover-kicker, .cover-marrying { font-size: .72rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase }
 .cover-kicker { color: var(--champagne); margin: 0 0 clamp(18px, 3vw, 30px) }
@@ -155,7 +179,7 @@ a { color: inherit }
 .entourage-inner { max-width: var(--content-wide); text-align: center }
 .entourage [data-reveal="heading"] > h2 { color: var(--wine); font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: .9; margin: 20px 0 10px; max-width: 100% }
 .entourage > .section-inner > .botanical { margin-bottom: clamp(34px, 5vw, 58px) }
-.entourage-group, .role-grid { border-top: 1px solid rgba(101,13,20,.28); margin-top: clamp(36px, 5vw, 56px); padding-top: clamp(30px, 4vw, 48px) }
+.entourage-group, .role-grid { border-top: 1px solid rgb(var(--wine-rgb) / .28); margin-top: clamp(36px, 5vw, 56px); padding-top: clamp(30px, 4vw, 48px) }
 .entourage-group > h3, .role-grid h3, .paired-headings h3 { color: var(--wine); font-size: clamp(1.7rem, 2.6vw, 2.35rem); line-height: 1; margin: 0 0 clamp(18px, 2.4vw, 26px) }
 .parents-columns { display: grid; gap: clamp(20px, 5vw, 80px); grid-template-columns: 1fr 1fr; margin-inline: auto; max-width: 980px }
 .parents-columns div:first-child { text-align: right }
@@ -166,7 +190,7 @@ a { color: inherit }
 .paired-row p { font-size: 1.02rem; line-height: 1.3; margin: 0; overflow-wrap: anywhere }
 .paired-row p:first-child { text-align: right }
 .paired-row p:last-child { text-align: left }
-.paired-row i { background: rgba(101,13,20,.35); height: 1px; margin-inline: clamp(4px, 1.4vw, 14px) }
+.paired-row i { background: rgb(var(--wine-rgb) / .35); height: 1px; margin-inline: clamp(4px, 1.4vw, 14px) }
 .role-grid { display: grid; gap: clamp(24px, 3vw, 40px) }
 .role-grid article { min-width: 0 }
 .role-grid p { line-height: 1.3; margin: 5px 0; overflow-wrap: anywhere }
@@ -187,15 +211,23 @@ a { color: inherit }
 .attire-image { aspect-ratio: 3 / 2; display: block; height: auto; object-fit: contain; width: 100% }
 .dress-copy { border-left: 1px solid rgba(214,196,172,.5); padding: clamp(20px, 3vw, 36px) 0 clamp(20px, 3vw, 36px) clamp(24px, 3.5vw, 48px); text-align: left }
 .dress-copy h3 { color: var(--champagne); font-size: clamp(1.2rem, 1.8vw, 1.4rem); font-weight: 500; letter-spacing: .15em; margin: 0 0 22px; text-transform: uppercase }
-.dress-copy p { margin: 15px 0 }
+.dress-copy p { line-height: 1.55; margin: 18px 0 }
 .dress-copy strong { color: var(--champagne); font-size: .72rem; letter-spacing: .15em; text-transform: uppercase }
 .motif { border-top: 1px solid rgba(214,196,172,.45); margin-top: clamp(48px, 7vw, 84px); padding-top: clamp(36px, 5vw, 56px) }
 .motif h3 { font-size: clamp(2.4rem, 5vw, 3.4rem); margin: 0 0 clamp(24px, 3vw, 34px) }
-.swatches { display: grid; gap: clamp(18px, 3vw, 36px); grid-template-columns: repeat(4, minmax(0, 1fr)); margin-inline: auto; max-width: 760px }
+.swatches { display: grid; gap: clamp(18px, 3vw, 36px); grid-template-columns: repeat(3, minmax(0, 1fr)); margin-inline: auto; max-width: 620px }
 .swatches > div { min-width: 0 }
 .swatch { border: 1px solid rgba(240,235,227,.55); border-radius: 50%; display: block; height: clamp(48px, 6vw, 64px); margin: auto; width: clamp(48px, 6vw, 64px) }
-.swatch--wine { border: 2px solid var(--ivory); box-shadow: 0 0 0 1px rgba(214,196,172,.6) }
+.swatch--deep-burgundy { background: var(--deep-burgundy); border: 2px solid var(--ivory); box-shadow: 0 0 0 1px rgba(214,196,172,.6) }
+.swatch--champagne { background: var(--champagne) }
+.swatch--blush { background: var(--blush) }
+.swatch--black { background: #111 }
 .swatches p { color: var(--champagne); font-size: .7rem; letter-spacing: .1em; margin-bottom: 0 }
+.swatches small, .gentlemen-color small { display: block; font-size: .65rem; letter-spacing: .08em; margin-top: 3px }
+.gentlemen-color { align-items: center; border: 1px solid rgba(214,196,172,.28); display: inline-flex; gap: 16px; margin-top: clamp(28px, 4vw, 40px); padding: 13px 18px; text-align: left }
+.gentlemen-color .swatch { flex: 0 0 auto; height: 42px; margin: 0; width: 42px }
+.gentlemen-color p { color: var(--champagne); font-size: .72rem; letter-spacing: .09em; margin: 0 }
+.gentlemen-color strong { color: var(--ivory); display: block; font-weight: 600; text-transform: uppercase }
 .gift-inner { max-width: 760px; text-align: center }
 .gift-note h2 { color: var(--wine); font-size: clamp(2.8rem, 6vw, 5.4rem); line-height: 1; margin: 18px 0 26px }
 .gift-note p { font-size: clamp(1.05rem, 1.4vw, 1.18rem); margin: auto; max-width: 520px }
@@ -396,7 +428,7 @@ footer a { align-items: center; color: var(--champagne); display: inline-flex; f
   .cover-names small { margin-left: 0 }
   .cover-actions { justify-content: center }
   .cover-art { order: 0 }
-  .hero-gallery { margin-inline: auto; max-width: 520px }
+  .hero-portrait-shell { margin-inline: auto; max-width: 548px }
   .rsvp-inner { grid-template-columns: minmax(0, 1fr); gap: clamp(32px, 5vw, 48px) }
   .rsvp-intro { text-align: center }
   .rsvp-intro > p:not(.eyebrow):not(.seat-note) { margin-inline: auto }
@@ -439,7 +471,7 @@ footer a { align-items: center; color: var(--champagne); display: inline-flex; f
   .event-rule::before { top: 0 }
   .event-rule::after { bottom: 0; top: auto }
   .honor-grid, .symbols-grid, .bearers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) }
-  .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 460px }
+  .swatches { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 460px }
   .admin-header { align-items: flex-start; flex-direction: column; gap: 8px }
   .admin-header > div { justify-content: space-between; width: 100% }
   .admin-heading { align-items: stretch; flex-direction: column }
@@ -468,8 +500,13 @@ footer a { align-items: center; color: var(--champagne); display: inline-flex; f
   .cover-kicker { font-size: .64rem; letter-spacing: .2em }
   .cover-marrying { font-size: .64rem; letter-spacing: .2em }
   .portrait-oval { width: min(76vw, 300px) }
-  .hero-gallery { gap: 14px; grid-template-columns: minmax(0, 1fr); max-width: 320px }
+  .hero-portrait-shell { max-width: 344px }
+  .hero-gallery { gap: 14px; grid-template-columns: minmax(0, 1fr) }
   .hero-gallery figure:nth-child(2) { margin-top: 0 }
+  .kiss-heart { left: 41%; top: 19% }
+  .hero-portrait.is-kissing .kiss-heart--one { left: 48%; top: 16% }
+  .hero-portrait.is-kissing .kiss-heart--two { left: 55%; top: 21% }
+  .hero-portrait.is-kissing .kiss-heart--three { left: 35%; top: 15% }
   .cover-actions { width: 100% }
   .cover-actions a { flex: 1 1 150px }
   .scroll-cue { margin-top: 34px }
@@ -509,4 +546,8 @@ footer a { align-items: center; color: var(--champagne); display: inline-flex; f
   .reveal-pending { opacity: 1 !important; transform: none !important }
   .wax-seal.reveal-pending { transform: translate(-50%,-50%) rotate(-7deg) !important }
   .cover-names { transform: none }
+  .hero-portrait { transform: none !important }
+  .hero-portrait.is-kissing .hero-gallery figure:first-child img { transform: none }
+  .hero-portrait.is-kissing .kiss-heart { animation: none !important; opacity: 0 }
+  .hero-portrait.is-kissing .kiss-heart--lead { opacity: .88; transform: none }
 }
