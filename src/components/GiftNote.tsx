@@ -1,0 +1,2 @@
+import { BotanicalOrnament } from './BotanicalOrnament'
+export function GiftNote() { return <section className="gift-note panel-section panel-section--ivory"><div className="section-inner gift-inner"><div data-reveal="heading"><BotanicalOrnament /><h2 className="script">A Note on Gifts</h2></div><p data-reveal>Your presence is our greatest gift. A thoughtful gift, should you wish to give, is warmly appreciated.</p></div></section> }

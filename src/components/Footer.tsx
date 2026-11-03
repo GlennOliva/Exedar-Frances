@@ -1,0 +1,2 @@
+import { Monogram } from './Monogram'
+export function Footer() { return <footer><div className="footer-inner"><Monogram ampersand /><h2 className="script">Exedar &amp; Frances</h2><p>January 23, 2027 · Davao City</p><p>We look forward to celebrating with you.</p><a href="#top">Back to top <span aria-hidden="true">↑</span></a><div className="developer-credit"><p>Developed by <strong>Glenn Angelo V. Oliva</strong></p><p>Web Development &amp; Automation Services</p><a href="mailto:glennoliva122@gmail.com">glennoliva122@gmail.com</a></div></div></footer> }
