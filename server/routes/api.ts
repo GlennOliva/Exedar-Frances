@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, type Request, type Response } from 'express'
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { rsvpSchema, linkRequestSchema, manageUpdateSchema, tokenSchema } from '../../shared/validation/rsvp'
 import { createRsvp, getManagedRsvp, requestManagementLink, unsubscribe, updateManagedRsvp } from '../services/rsvp'
@@ -35,10 +35,13 @@ api.post('/manage/unsubscribe', async (request, response) => {
   if (!parsed.success || request.body?.confirmed !== true) return response.status(400).json({ ok: false, message: 'Explicit confirmation is required.' })
   try { await unsubscribe(parsed.data.token); return response.json({ ok: true, message: 'You have been unsubscribed from wedding reminders. Your RSVP remains unchanged.' }) } catch { return response.status(401).json({ ok: false, message: invalidLinkMessage }) }
 })
-api.post('/jobs/reminders', async (request, response) => {
+async function runReminderJob(request: Request, response: Response) {
   const supplied = request.get('Authorization')?.replace(/^Bearer\s+/i, '') ?? ''
   const expected = getEnv().SCHEDULER_SECRET
   const suppliedHash = createHash('sha256').update(supplied).digest(); const expectedHash = createHash('sha256').update(expected).digest()
   if (!timingSafeEqual(suppliedHash, expectedHash)) return response.status(401).json({ ok: false })
   try { return response.json({ ok: true, ...(await runReminders()) }) } catch (error) { logServerError('reminders.run', error); return response.status(503).json({ ok: false }) }
-})
+}
+
+api.get('/jobs/reminders', runReminderJob)
+api.post('/jobs/reminders', runReminderJob)

@@ -6,6 +6,7 @@ import { sendMail } from './mailer'
 import { createToken } from './tokens'
 
 interface ClaimedDelivery { id: string; rsvp_id: string }
+const reminderGraceMs = 2 * 60 * 60 * 1000
 
 function links(guest: GuestEmail) {
   const base = getEnv().APP_BASE_URL
@@ -21,7 +22,7 @@ export async function runReminders(now = new Date()) {
   let claimed = 0; let sent = 0
   for (const reminder of weddingConfig.reminders) {
     const age = now.getTime() - reminder.sendAt.getTime()
-    if (age < 0 || age > 30 * 60 * 1000) continue
+    if (age < 0 || age > reminderGraceMs) continue
     const claim = await supabase.rpc('claim_reminder_deliveries', {
       p_email_type: `reminder:${reminder.key}`,
       p_scheduled_for: reminder.sendAt.toISOString(),

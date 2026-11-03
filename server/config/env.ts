@@ -1,12 +1,14 @@
 import { config } from 'dotenv'
 import { z } from 'zod'
 
-// Local overrides load first; dotenv never overwrites an existing process value by default.
-config({ path: '.env.local', quiet: true })
-config({ path: '.env', quiet: true })
+// Vercel injects process.env; local files are only a development convenience.
+if (!process.env.VERCEL) {
+  config({ path: '.env.local', quiet: true })
+  config({ path: '.env', quiet: true })
+}
 
 const schema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: z.enum(['development', 'test', 'production']).default(process.env.VERCEL ? 'production' : 'development'),
   PORT: z.coerce.number().int().positive().default(3001),
   SUPABASE_URL: z.string().url(),
   SUPABASE_SECRET_KEY: z.string().min(20),
@@ -17,7 +19,7 @@ const schema = z.object({
   SMTP_USER: z.string().default(''), SMTP_PASS: z.string().default(''), SMTP_FROM: z.string().default(''),
   APP_BASE_URL: z.string().url(), TOKEN_SIGNING_SECRET: z.string().min(32), SCHEDULER_SECRET: z.string().min(32),
   TEST_EMAIL_TO: z.string().email().optional(), MAIL_DELIVERY_MODE: z.enum(['log', 'test', 'production']).default('log'),
-  TRUST_PROXY: z.enum(['true', 'false']).default('false'),
+  TRUST_PROXY: z.enum(['true', 'false']).default(process.env.VERCEL ? 'true' : 'false'),
 })
 
 export type Env = z.infer<typeof schema>

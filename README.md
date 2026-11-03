@@ -8,7 +8,7 @@ An accessible React and TypeScript invitation with a Supabase-backed RSVP API, G
 - A Supabase project
 - A Supabase secret key for server-side access
 - A Gmail account with 2-Step Verification and a Google App Password for live delivery
-- An always-on Node host, or an external scheduler that calls the protected reminder endpoint every five minutes
+- An always-on Node host, or a protected platform scheduler
 
 Supabase is the durable source of truth for RSVPs, consent, unsubscribe state, idempotency keys, rate limits, and delivery records. Browser storage, server memory, and local files are not used for RSVP persistence.
 
@@ -131,9 +131,11 @@ Reminder instants remain centralized in `server/config/wedding.ts`:
 - January 16, 2027 at 9:00 AM Asia/Manila
 - January 22, 2027 at 9:00 AM Asia/Manila
 
-The internal `node-cron` job checks every five minutes. Supabase atomically claims one delivery per guest/reminder, including across concurrent server instances. Eligibility is rechecked immediately before SMTP delivery.
+The internal `node-cron` job checks every five minutes on an always-on Node host. Supabase atomically claims one delivery per guest/reminder, including across concurrent server instances. Eligibility is rechecked immediately before SMTP delivery.
 
 For hosts without persistent processes, schedule `POST /api/jobs/reminders` every five minutes with `Authorization: Bearer $SCHEDULER_SECRET`. Running internal and external schedulers together is safe because claims are unique.
+
+On Vercel, the local timer is not started. `vercel.json` configures a daily 01:00 UTC Cron invocation, corresponding to 9:00 AM in Manila. The reminder service allows a two-hour processing grace period because Hobby Cron invocations may occur at any point during the configured UTC hour. The route also retains protected POST support for manual or external schedulers. Vercel Cron sends GET requests and automatically supplies `Authorization: Bearer $CRON_SECRET`; configure `CRON_SECRET` with the same value as `SCHEDULER_SECRET`. Do not invoke this route while validating production unless `MAIL_DELIVERY_MODE=log` or `test` is intentionally configured.
 
 ## Production deployment
 
@@ -144,3 +146,43 @@ For hosts without persistent processes, schedule `POST /api/jobs/reminders` ever
 5. Verify `/api/health` with `MAIL_DELIVERY_MODE=log`, then use `test` with `TEST_EMAIL_TO` before explicitly enabling `production` mail.
 
 The server does not log request bodies, guest records, Supabase keys, SMTP credentials, or management tokens. The static website design, entourage, dress-code illustration, animations, and scripted wedding assistant are independent of Supabase and remain unchanged.
+
+## Vercel deployment
+
+This repository deploys the Vite frontend from `dist/` and routes `/api/*` to the Node.js function in `api/server.ts`. The function imports the same Express application used locally without calling `app.listen()` or starting `node-cron`. The API rewrite is listed before the explicit SPA rewrites, so `/api/rsvps`, management, unsubscribe, administrator, and scheduler requests cannot fall through to `index.html`. Direct navigation to `/admin`, `/admin/login`, `/manage`, and `/unsubscribe` resolves to the SPA.
+
+In the Vercel project dashboard, use the repository root as the Root Directory. `vercel.json` selects the Vite framework, runs `npm run build`, uses `dist` as the Output Directory, and configures the Node.js function and Cron Job. Node.js 22 is pinned in `package.json`.
+
+Configure these Production environment variables in **Project Settings → Environment Variables**:
+
+- `SUPABASE_URL`: production Supabase project URL.
+- `SUPABASE_SECRET_KEY`: server secret/service-role key. Never prefix it with `VITE_`.
+- `SUPABASE_PUBLISHABLE_KEY`: publishable key used by the server-side administrator authentication client.
+- `SMTP_HOST`: normally `smtp.gmail.com`.
+- `SMTP_PORT`: normally `465`.
+- `SMTP_USER`: Gmail sender address.
+- `SMTP_PASS`: Google App Password, not the normal account password.
+- `SMTP_FROM`: formatted sender identity.
+- `TOKEN_SIGNING_SECRET`: independent random value of at least 32 characters.
+- `SCHEDULER_SECRET`: independent random value of at least 32 characters.
+- `CRON_SECRET`: set to the same value as `SCHEDULER_SECRET` so Vercel's automatic Cron authorization passes existing scheduler validation.
+- `MAIL_DELIVERY_MODE`: use `log` for deployment verification, `test` with `TEST_EMAIL_TO` for an intentional redirected SMTP check, and only then `production` for real recipients.
+- `TEST_EMAIL_TO`: required only when `MAIL_DELIVERY_MODE=test`.
+- `APP_BASE_URL`: exactly `https://exedarfrances.vercel.app` for the production deployment.
+- `TRUST_PROXY`: `true` on Vercel so IP-based Express limits use the trusted forwarded client address.
+
+The browser uses same-origin `/api` requests and does not connect directly to Supabase, so no frontend `VITE_*` key is required. `VITE_SUPABASE_PUBLISHABLE_KEY` remains a server-side fallback for legacy local configuration, but `SUPABASE_PUBLISHABLE_KEY` is preferred in Vercel.
+
+`.env.local` is ignored and is not automatically transferred to Vercel. Add values through the Vercel dashboard or CLI without committing them. Environment-variable changes apply only to new deployments, so redeploy after adding or changing any value. Keep Preview values separate if preview administrator mutations are needed, because `APP_BASE_URL` is enforced as the accepted request origin.
+
+Recommended verification order:
+
+1. Deploy with `MAIL_DELIVERY_MODE=log` and Cron Jobs disabled in the Vercel dashboard.
+2. Confirm `GET /api/health` returns `200` JSON rather than an SPA page or `x-vercel-error: NOT_FOUND`.
+3. Submit only controlled RSVP test data and verify the Supabase row plus simulated delivery status.
+4. Verify `/admin/login`, `/manage`, and `/unsubscribe` direct navigation.
+5. Enable Cron Jobs only after environment variables and reminder behavior are confirmed. Vercel Cron is best-effort; Supabase delivery claims preserve idempotency if an invocation is duplicated.
+
+Deployment approach references: [Vercel Node.js Functions](https://vercel.com/docs/functions/runtimes/node-js), [Express on Vercel](https://vercel.com/docs/frameworks/backend/express), [Vercel rewrites](https://vercel.com/docs/routing/rewrites), and [Vercel Cron Jobs](https://vercel.com/docs/cron-jobs).
+
+The default Express rate-limit stores remain per-process defense-in-depth and therefore reset or vary across Vercel function instances. The existing Supabase-backed RSVP email and management-link limits remain durable across instances. For globally consistent IP limits beyond those durable application limits, add a distributed store or Vercel Firewall rule rather than relying on function memory alone.
