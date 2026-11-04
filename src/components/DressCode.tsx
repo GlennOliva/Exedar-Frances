@@ -3,7 +3,7 @@ import { WaxSeal } from './EditorialOrnaments'
 
 export function DressCode() {
   const colors = [
-    { name: 'Deep Burgundy', className: 'swatch--deep-burgundy', detail: '#59000A' },
+    { name: 'Deep Burgundy', className: 'swatch--deep-burgundy' },
     { name: 'Champagne', className: 'swatch--champagne' },
     { name: 'Soft Blush', className: 'swatch--blush' },
   ]
@@ -35,10 +35,10 @@ export function DressCode() {
         <div className="motif">
           <h3 className="script" data-reveal="heading">Our Motif</h3>
           <div className="swatches">
-            {colors.map(({ name, className, detail }, index) => (
+            {colors.map(({ name, className }, index) => (
               <div key={name} data-reveal data-reveal-delay={String(index + 1)}>
                 <span className={`swatch ${className}`} aria-hidden="true" />
-                <p>{name}{detail && <small>&mdash; {detail}</small>}</p>
+                <p>{name}{name && <small>&mdash;</small>}</p>
               </div>
             ))}
           </div>
