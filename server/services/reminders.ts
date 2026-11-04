@@ -1,9 +1,9 @@
-import { supabase } from '../db/supabase'
-import { getEnv } from '../config/env'
-import { weddingConfig } from '../config/wedding'
-import { reminderEmail, type GuestEmail } from '../emails/templates'
-import { sendMail } from './mailer'
-import { createToken } from './tokens'
+import { supabase } from '../db/supabase.js'
+import { getEnv } from '../config/env.js'
+import { weddingConfig } from '../config/wedding.js'
+import { reminderEmail, type GuestEmail } from '../emails/templates.js'
+import { sendMail } from './mailer.js'
+import { createToken } from './tokens.js'
 
 interface ClaimedDelivery { id: string; rsvp_id: string }
 const reminderGraceMs = 2 * 60 * 60 * 1000

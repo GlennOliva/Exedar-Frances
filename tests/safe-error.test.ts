@@ -15,7 +15,7 @@ describe('safe server error logging', () => {
 
   it('logs operation, provider code, and a sanitized cause message', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    const { logServerError } = await import('../server/lib/safeError')
+    const { logServerError } = await import('../server/lib/safeError.js')
     const error = new Error('RSVP save failed', {
       cause: {
         name: 'PostgrestError',

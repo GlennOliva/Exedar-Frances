@@ -1,4 +1,4 @@
-import { getEnv } from '../config/env'
+import { getEnv } from '../config/env.js'
 
 const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi
 const tokenPattern = /\b(?:eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+|sb_(?:secret|publishable)_[A-Za-z0-9_-]+|[a-f0-9]{32,})\b/gi

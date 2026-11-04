@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
-import type { AdminAuthSession } from '../services/adminAuth'
-import { getEnv } from '../config/env'
+import type { AdminAuthSession } from '../services/adminAuth.js'
+import { getEnv } from '../config/env.js'
 
 export const adminAccessCookie = 'wedding_admin_access'
 export const adminRefreshCookie = 'wedding_admin_refresh'

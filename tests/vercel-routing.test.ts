@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
-import handler from '../api/server'
+import handler from '../api/server.js'
 
 describe('Vercel API function routing', () => {
   it('forwards the health route into the shared Express application', async () => {

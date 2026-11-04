@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { entourage } from '../src/data/entourage'
+import { entourage } from '../src/data/entourage.js'
 
 describe('entourage transcription', () => {
   it('has every expected role count', () => {

@@ -2,10 +2,10 @@ import express, { type NextFunction, type Request, type Response } from 'express
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import { fileURLToPath } from 'node:url'
-import { getEnv } from './config/env'
-import { logServerError } from './lib/safeError'
-import { adminApi } from './routes/admin'
-import { api } from './routes/api'
+import { getEnv } from './config/env.js'
+import { logServerError } from './lib/safeError.js'
+import { adminApi } from './routes/admin.js'
+import { api } from './routes/api.js'
 
 interface AppOptions {
   serveStatic?: boolean

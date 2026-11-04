@@ -1,5 +1,5 @@
-import { getEnv } from '../config/env'
-import { createSmtpTransport } from '../services/mailer'
+import { getEnv } from '../config/env.js'
+import { createSmtpTransport } from '../services/mailer.js'
 
 interface SmtpError extends Error {
   code?: string

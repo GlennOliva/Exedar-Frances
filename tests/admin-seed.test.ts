@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { seedAdmin, type AdminSeedDependencies, type SeedUser } from '../server/services/adminSeed'
+import { seedAdmin, type AdminSeedDependencies, type SeedUser } from '../server/services/adminSeed.js'
 
 function fixture(existing: SeedUser | null, verified: SeedUser | null, role = false) {
   let user = existing

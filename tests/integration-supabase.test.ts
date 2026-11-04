@@ -63,7 +63,7 @@ function input(email: string, attendance: 'attending' | 'declining', reminderCon
 
 async function loadModules() {
   const [{ supabase }, rsvp, tokens, reminders] = await Promise.all([
-    import('../server/db/supabase'), import('../server/services/rsvp'), import('../server/services/tokens'), import('../server/services/reminders'),
+    import('../server/db/supabase.js'), import('../server/services/rsvp.js'), import('../server/services/tokens.js'), import('../server/services/reminders.js'),
   ])
   return { supabase, ...rsvp, ...tokens, ...reminders }
 }

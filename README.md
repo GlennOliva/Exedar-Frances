@@ -153,6 +153,8 @@ This repository deploys the Vite frontend from `dist/` and routes `/api/*` to th
 
 In the Vercel project dashboard, use the repository root as the Root Directory. `vercel.json` selects the Vite framework, runs `npm run build`, uses `dist` as the Output Directory, and configures the Node.js function and Cron Job. Node.js 22 is pinned in `package.json`.
 
+`api/server.ts` and every backend module it reaches are type-checked with NodeNext resolution in `tsconfig.server.json`. Because `@vercel/node` transpiles function modules in place and runs them as plain Node ESM, relative imports must use the emitted `.js` path even though the source files are `.ts`. An extensionless import type-checks under bundler resolution and then fails in production with `ERR_MODULE_NOT_FOUND`. Run `npm run check:function` after backend changes: it compiles the runtime graph to `.server-build/`, asserts every emitted relative import resolves to a compiled file, and loads `api/server.js` with plain Node to verify health and RSVP validation without `tsx`, `app.listen()`, or a scheduler.
+
 Configure these Production environment variables in **Project Settings → Environment Variables**:
 
 - `SUPABASE_URL`: production Supabase project URL.
@@ -177,7 +179,8 @@ The browser uses same-origin `/api` requests and does not connect directly to Su
 
 Recommended verification order:
 
-1. Deploy with `MAIL_DELIVERY_MODE=log` and Cron Jobs disabled in the Vercel dashboard.
+1. Run `npm run check:function` locally to confirm the compiled function loads as plain Node ESM.
+2. Deploy with `MAIL_DELIVERY_MODE=log` and Cron Jobs disabled in the Vercel dashboard.
 2. Confirm `GET /api/health` returns `200` JSON rather than an SPA page or `x-vercel-error: NOT_FOUND`.
 3. Submit only controlled RSVP test data and verify the Supabase row plus simulated delivery status.
 4. Verify `/admin/login`, `/manage`, and `/unsubscribe` direct navigation.

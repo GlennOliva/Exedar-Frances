@@ -1,4 +1,4 @@
-import { dressCodeGuidance } from '../../shared/wedding'
+import { dressCodeGuidance } from '../../shared/wedding.js'
 
 export type AssistantIntent = 'dating' | 'meeting' | 'firstMove' | 'wedding' | 'dressCode' | 'rsvp' | 'unknown'
 

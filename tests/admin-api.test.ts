@@ -1,10 +1,10 @@
 import express from 'express'
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
-import type { AdminRsvpRow } from '../shared/types'
-import { createAdminRouter } from '../server/routes/admin'
-import { AdminAuthError, type AdminAuthService, type AdminAuthSession } from '../server/services/adminAuth'
-import type { AdminDataService, AdminListQuery } from '../server/services/adminData'
+import type { AdminRsvpRow } from '../shared/types/index.js'
+import { createAdminRouter } from '../server/routes/admin.js'
+import { AdminAuthError, type AdminAuthService, type AdminAuthSession } from '../server/services/adminAuth.js'
+import type { AdminDataService, AdminListQuery } from '../server/services/adminData.js'
 
 const records: AdminRsvpRow[] = [
   { id: '11111111-1111-4111-8111-111111111111', firstName: 'Ada', lastName: 'Lovelace', email: 'ada@example.com', attendance: 'attending', reminderConsent: true, createdAt: '2026-11-01T00:00:00Z', updatedAt: '2026-11-02T00:00:00Z' },

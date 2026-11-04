@@ -1,11 +1,11 @@
 import { Router, type NextFunction, type Request, type Response } from 'express'
 import rateLimit from 'express-rate-limit'
-import { adminListQuerySchema, adminLoginSchema, adminPasswordChangeSchema, adminRsvpIdSchema } from '../../shared/validation/admin'
-import { clearAdminCookies, adminAccessCookie, adminRefreshCookie, readCookies, setAdminCookies } from '../lib/adminCookies'
-import { logServerError } from '../lib/safeError'
-import { AdminAuthError, adminAuthService, type AdminAuthService, type AdminAuthSession } from '../services/adminAuth'
-import { adminDataService, type AdminDataService } from '../services/adminData'
-import { getEnv } from '../config/env'
+import { adminListQuerySchema, adminLoginSchema, adminPasswordChangeSchema, adminRsvpIdSchema } from '../../shared/validation/admin.js'
+import { clearAdminCookies, adminAccessCookie, adminRefreshCookie, readCookies, setAdminCookies } from '../lib/adminCookies.js'
+import { logServerError } from '../lib/safeError.js'
+import { AdminAuthError, adminAuthService, type AdminAuthService, type AdminAuthSession } from '../services/adminAuth.js'
+import { adminDataService, type AdminDataService } from '../services/adminData.js'
+import { getEnv } from '../config/env.js'
 
 interface AdminDependencies { auth: AdminAuthService; data: AdminDataService }
 type AuthenticatedRequest = Request & { adminUserId?: string }

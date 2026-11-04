@@ -1,11 +1,11 @@
 import { createHash } from 'node:crypto'
-import type { EmailStatus, RsvpInput } from '../../shared/types'
-import { supabase } from '../db/supabase'
-import { getEnv } from '../config/env'
-import { confirmationEmail, managementEmail, type GuestEmail } from '../emails/templates'
-import { sendMail } from './mailer'
-import { durableRateLimit } from './rateLimit'
-import { createToken, verifyToken } from './tokens'
+import type { EmailStatus, RsvpInput } from '../../shared/types/index.js'
+import { supabase } from '../db/supabase.js'
+import { getEnv } from '../config/env.js'
+import { confirmationEmail, managementEmail, type GuestEmail } from '../emails/templates.js'
+import { sendMail } from './mailer.js'
+import { durableRateLimit } from './rateLimit.js'
+import { createToken, verifyToken } from './tokens.js'
 
 interface RsvpRecord extends GuestEmail {
   message: string | null

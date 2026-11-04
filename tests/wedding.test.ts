@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { weddingConfig } from '../server/config/wedding'
+import { weddingConfig } from '../server/config/wedding.js'
 
 describe('wedding schedule', () => {
   it('uses the required Manila instants', () => {

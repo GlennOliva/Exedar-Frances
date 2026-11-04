@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { assistantAnswers, matchAssistantIntent, suggestedQuestions } from '../src/data/assistantContent'
+import { assistantAnswers, matchAssistantIntent, suggestedQuestions } from '../src/data/assistantContent.js'
 
 describe('wedding assistant content', () => {
   it.each([

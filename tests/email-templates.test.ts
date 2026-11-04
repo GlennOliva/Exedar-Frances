@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { confirmationEmail, reminderEmail, type GuestEmail } from '../server/emails/templates'
+import { confirmationEmail, reminderEmail, type GuestEmail } from '../server/emails/templates.js'
 
 const guest: GuestEmail = {
   id: 'guest-1',

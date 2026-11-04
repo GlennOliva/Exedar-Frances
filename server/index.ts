@@ -1,6 +1,6 @@
-import { createApp } from './app'
-import { getEnv } from './config/env'
-import { startScheduler } from './jobs/scheduler'
+import { createApp } from './app.js'
+import { getEnv } from './config/env.js'
+import { startScheduler } from './jobs/scheduler.js'
 
 const env = getEnv()
 const app = createApp({ serveStatic: env.NODE_ENV === 'production' })

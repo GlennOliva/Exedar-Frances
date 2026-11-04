@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
-import { getEnv } from '../config/env'
-import { supabase } from '../db/supabase'
-import { seedAdmin, type AdminSeedDependencies } from '../services/adminSeed'
+import { getEnv } from '../config/env.js'
+import { supabase } from '../db/supabase.js'
+import { seedAdmin, type AdminSeedDependencies } from '../services/adminSeed.js'
 
 const seedSchema = z.object({
   ADMIN_SEED_EMAIL: z.string().trim().email().transform((value) => value.toLowerCase()),

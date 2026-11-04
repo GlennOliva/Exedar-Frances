@@ -1,10 +1,10 @@
 import { Router, type Request, type Response } from 'express'
 import { createHash, timingSafeEqual } from 'node:crypto'
-import { rsvpSchema, linkRequestSchema, manageUpdateSchema, tokenSchema } from '../../shared/validation/rsvp'
-import { createRsvp, getManagedRsvp, requestManagementLink, unsubscribe, updateManagedRsvp } from '../services/rsvp'
-import { runReminders } from '../services/reminders'
-import { getEnv } from '../config/env'
-import { logServerError } from '../lib/safeError'
+import { rsvpSchema, linkRequestSchema, manageUpdateSchema, tokenSchema } from '../../shared/validation/rsvp.js'
+import { createRsvp, getManagedRsvp, requestManagementLink, unsubscribe, updateManagedRsvp } from '../services/rsvp.js'
+import { runReminders } from '../services/reminders.js'
+import { getEnv } from '../config/env.js'
+import { logServerError } from '../lib/safeError.js'
 
 export const api = Router()
 const genericLinkMessage = 'If an RSVP exists for that address, a secure link will arrive shortly.'

@@ -1,7 +1,7 @@
 import type { z } from 'zod'
-import type { AdminRsvpDetail, AdminRsvpList, AdminRsvpRow, AdminSummary } from '../../shared/types'
-import type { adminListQuerySchema } from '../../shared/validation/admin'
-import { supabase } from '../db/supabase'
+import type { AdminRsvpDetail, AdminRsvpList, AdminRsvpRow, AdminSummary } from '../../shared/types/index.js'
+import type { adminListQuerySchema } from '../../shared/validation/admin.js'
+import { supabase } from '../db/supabase.js'
 
 export type AdminListQuery = z.infer<typeof adminListQuerySchema>
 

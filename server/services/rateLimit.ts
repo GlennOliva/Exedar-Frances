@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { supabase } from '../db/supabase'
+import { supabase } from '../db/supabase.js'
 
 export async function durableRateLimit(scope: string, value: string, maximum: number, minutes: number) {
   const hash = createHash('sha256').update(value.toLowerCase()).digest('hex')

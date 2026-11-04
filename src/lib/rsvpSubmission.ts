@@ -1,4 +1,4 @@
-import type { ApiMessage, RsvpInput } from '../../shared/types'
+import type { ApiMessage, RsvpInput } from '../../shared/types/index.js'
 
 export interface ResettableForm {
   reset(): void

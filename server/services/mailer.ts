@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { getEnv } from '../config/env'
+import { getEnv } from '../config/env.js'
 
 export interface MailContent { subject: string; html: string; text: string }
 interface SmtpOutcome { accepted: number; rejected: number; pending: number; responseCode: number | null }

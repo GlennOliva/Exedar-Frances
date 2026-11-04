@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
-import type { AdminSession } from '../../shared/types'
-import { getEnv } from '../config/env'
-import { supabase } from '../db/supabase'
+import type { AdminSession } from '../../shared/types/index.js'
+import { getEnv } from '../config/env.js'
+import { supabase } from '../db/supabase.js'
 
 export type AdminAuthCode = 'invalid_credentials' | 'unauthenticated' | 'forbidden' | 'password_change_required' | 'password_change_failed'
 

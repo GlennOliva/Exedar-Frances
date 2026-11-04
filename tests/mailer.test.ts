@@ -13,13 +13,13 @@ describe('mailer delivery states', () => {
   })
 
   it('reports JSON transport as simulated rather than SMTP accepted', async () => {
-    const { sendMail } = await import('../server/services/mailer')
+    const { sendMail } = await import('../server/services/mailer.js')
     const result = await sendMail('test@example.invalid', { subject: 'Test', text: 'Test', html: '<p>Test</p>' })
     expect(result).toMatchObject({ status: 'simulated' })
   })
 
   it('uses the submitted address in production and the configured redirect only in test mode', async () => {
-    const { resolveRecipient } = await import('../server/services/mailer')
+    const { resolveRecipient } = await import('../server/services/mailer.js')
     expect(resolveRecipient('production', 'submitted@example.invalid', 'redirect@example.invalid')).toBe('submitted@example.invalid')
     expect(resolveRecipient('test', 'submitted@example.invalid', 'redirect@example.invalid')).toBe('redirect@example.invalid')
   })

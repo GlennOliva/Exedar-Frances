@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { submitRsvp } from '../src/lib/rsvpSubmission'
-import type { RsvpInput } from '../shared/types'
+import { submitRsvp } from '../src/lib/rsvpSubmission.js'
+import type { RsvpInput } from '../shared/types/index.js'
 
 const input: RsvpInput = {
   firstName: 'Ada', lastName: 'Lovelace', email: 'ada@example.com', attendance: 'attending',

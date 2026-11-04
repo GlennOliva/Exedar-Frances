@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { createApp } from '../server/app'
+import { createApp } from '../server/app.js'
 
 const app = createApp()
 const routeParameter = '__vercel_api_path'

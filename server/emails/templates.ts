@@ -1,4 +1,4 @@
-import { weddingConfig as wedding } from '../config/wedding'
+import { weddingConfig as wedding } from '../config/wedding.js'
 
 export interface GuestEmail { id: string; first_name: string; last_name: string; email: string; attendance: 'attending' | 'declining'; reminder_consent: boolean; token_version: string }
 const esc = (value: string) => value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]!)

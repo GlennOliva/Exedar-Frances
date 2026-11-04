@@ -1,4 +1,4 @@
-import { dressCodeGuidance } from '../../shared/wedding'
+import { dressCodeGuidance } from '../../shared/wedding.js'
 
 export const weddingConfig = {
   timeZone: 'Asia/Manila',

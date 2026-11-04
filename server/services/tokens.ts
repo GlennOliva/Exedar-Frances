@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
-import { getEnv } from '../config/env'
+import { getEnv } from '../config/env.js'
 
 type TokenAction = 'manage' | 'unsubscribe'
 interface Payload { id: string; version: string; action: TokenAction; exp: number }
